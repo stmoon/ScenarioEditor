@@ -19,6 +19,9 @@ ImportError: No module named shutil_get_terminal_size
     Request that the security policy set the HOME environment variable to the home directory specified by the target user's password database entry.  Depending on the policy, this may be the default behavior.
 ```
 
+- Test Code로 testcode.py를 사용함 
+  - (중복으로 인하여 unittest.py 파일 사용할 수 없음)
+
 ## Interface
 
 ```python
