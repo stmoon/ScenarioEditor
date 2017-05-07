@@ -1,5 +1,5 @@
 
-class IScenarioPlugin :
+class IScenarioPlugin (object):
 
     _nodes = {}                 # trajectory for each node
     _properties = {}            # specific properties for specific scenario
@@ -7,6 +7,7 @@ class IScenarioPlugin :
     def __init__(self, start_time, end_time) :
         self._properties['start_time']  = start_time
         self._properties['end_time']  = end_time
+        self._nodes = {}
 
     def addNode(self, name):
         if not name in self._nodes :
