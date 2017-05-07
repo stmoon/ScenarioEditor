@@ -27,7 +27,10 @@ class IScenarioPlugin :
 
     # output : list of [x,y,z]
     def trajectory(self, name) :
-        return self._nodes[name]
+        if name in self._nodes :
+            return self._nodes[name]
+        else :
+            return False
 
     # specific scenario (child class) should implement update method 
     def update(self) :

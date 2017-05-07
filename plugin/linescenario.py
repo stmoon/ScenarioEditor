@@ -14,16 +14,15 @@ class LineScenario (IScenarioPlugin) :
         self._properties['rate'] = 10
 
     def addNode(self, name):
-        self._nodeName = name
-
         if len(self._nodes) is 0 :
+            self._nodeName = name
             return IScenarioPlugin.addNode(self, name)
         else :
             return False
 
     def update(self) :
         if self._nodeName is '' :
-            return
+            return False
 
         start_point = np.array(self._properties['start_point'], dtype='float32')
         end_point = np.array(self._properties['end_point'], dtype='float32')
