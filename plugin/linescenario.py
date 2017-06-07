@@ -36,7 +36,7 @@ class LineScenario (IScenarioPlugin) :
         for i in xrange(int(rate*duration)) :
             time = start_time + i * (1.0/rate)
             traj = alpha * i + start_point
-            self._nodes[self._nodeName].append([time, traj[0], traj[1],traj[2]])
+            self._nodes[self._nodeName].append([time, traj[0], traj[1], traj[2]])
 
         self._nodes[self._nodeName].append([end_time, end_point[0], end_point[1], end_point[2]])
 

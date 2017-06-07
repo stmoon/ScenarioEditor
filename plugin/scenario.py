@@ -24,7 +24,15 @@ class IScenarioPlugin (object):
 
     # output : list of scenario format 
     def scenario(self, node_name) :
-        pass
+        output = list()
+        
+        traj = self.trajectory(node_name)
+        for i in traj :
+            str = '<move id=%s> %f,%f,%f </move>' % (node_name, i[1], i[2], i[3]) 
+            output.append([i[0],str])
+            print node_name 
+
+        return output
 
     # output : list of [x,y,z]
     def trajectory(self, name) :
