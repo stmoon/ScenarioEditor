@@ -4,7 +4,7 @@ import numpy as np
 
 class LineScenario (IScenarioPlugin) :
 
-    _nodeName = ''
+    _node = None
 
     def __init__(self, start_time, end_time) :
         IScenarioPlugin.__init__(self, start_time, end_time)
@@ -13,15 +13,15 @@ class LineScenario (IScenarioPlugin) :
         self._properties['end_point'] = [0, 0, 0]
         self._properties['rate'] = 10
 
-    def addNode(self, name):
+    def addNode(self, node):
         if len(self._nodes) is 0 :
-            self._nodeName = name
-            return IScenarioPlugin.addNode(self, name)
+            self._node = node 
+            return IScenarioPlugin.addNode(self, node)
         else :
             return False
 
     def update(self) :
-        if self._nodeName is '' :
+        if self._node is None :
             return False
 
         start_point = np.array(self._properties['start_point'], dtype='float32')
@@ -36,7 +36,7 @@ class LineScenario (IScenarioPlugin) :
         for i in xrange(int(rate*duration)) :
             time = start_time + i * (1.0/rate)
             traj = alpha * i + start_point
-            self._nodes[self._nodeName].append([time, traj[0], traj[1], traj[2]])
+            self._nodes[self._node].append([time, traj[0], traj[1], traj[2]])
 
-        self._nodes[self._nodeName].append([end_time, end_point[0], end_point[1], end_point[2]])
+        self._nodes[self._node].append([end_time, end_point[0], end_point[1], end_point[2]])
 

@@ -1,3 +1,4 @@
+import node
 
 class IScenarioPlugin (object):
 
@@ -9,9 +10,9 @@ class IScenarioPlugin (object):
         self._properties['end_time']  = end_time
         self._nodes = {}
 
-    def addNode(self, name):
-        if not name in self._nodes :
-            self._nodes[name] = list()
+    def addNode(self, node):
+        if not node in self._nodes :
+            self._nodes[node] = list()
             return True
         else :
             return False
@@ -23,21 +24,26 @@ class IScenarioPlugin (object):
         self._properties[name] = value
 
     # output : list of scenario format 
-    def scenario(self, node_name) :
+    def scenario(self, node) :
         output = list()
         
-        traj = self.trajectory(node_name)
+        traj = self.trajectory(node)
         for i in traj :
-            str = '<move id=%s> %f,%f,%f </move>' % (node_name, i[1], i[2], i[3]) 
-            output.append([i[0],str])
-            print node_name 
+            time  = i[0]
+            pos_x = i[1]
+            pos_y = i[2]
+            pos_z = i[3]
+            str = '<move id=%d> %f,%f,%f </move>' % (node.id(), pos_x, pos_y, pos_z) 
+            output.append([time,str])
 
         return output
 
-    # output : list of [x,y,z]
-    def trajectory(self, name) :
-        if name in self._nodes :
-            return self._nodes[name]
+    # output : list of [time,x,y,z]
+    def trajectory(self, node=None) :
+        if node is None :
+            return self._nodes
+        elif node in self._nodes :
+            return self._nodes[node]
         else :
             return False
 
