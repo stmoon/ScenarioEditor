@@ -22,8 +22,14 @@ class CircleScenario (IScenarioPlugin) :
         end_time = self._properties['end_time']
         duration = end_time - start_time
 	
+	p1 = [[1,1,1]]
+		
 	# init
-	np.array([[
+	norm = np.linalg.norm(p1)
+	i = (p1/norm).T
+	j = np.dot([[0,-1,0],[1,0,0],[0,0,0]], i)
+	k = np.cross(i.T,j.T).T
+	C = np.concatenate([i,j,k], axis=1)
 	
 	# rotation 
         for i in xrange(int(rate*duration)) :
