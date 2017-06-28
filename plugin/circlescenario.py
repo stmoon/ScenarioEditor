@@ -23,16 +23,25 @@ class CircleScenario (IScenarioPlugin) :
         duration = end_time - start_time
 	
 	p1 = [[1,1,1]]
+	r  = 5
+	num_node = 10
 		
-	# init
+	# DCM
 	norm = np.linalg.norm(p1)
 	i = (p1/norm).T
 	j = np.dot([[0,-1,0],[1,0,0],[0,0,0]], i)
 	k = np.cross(i.T,j.T).T
 	C = np.concatenate([i,j,k], axis=1)
 	
-	# rotation 
-        for i in xrange(int(rate*duration)) :
-            time = start_time + i * (1.0/rate)
+	# rotation
+	for epoch in xrange(int(rate*duration)) :
+	    time = start_time + epoch * (1.0/rate)
+	    offset = np.deg2rad(epoch)
+		        
+	    pos = []
+	    for i in range(num) :
+		theta = np.deg2rad(360 / num) + offset
+	        pos.append( [r * np.cos(theta*i), r * np.sin(theta*i), 0.0] )
+	    pos =  np.dot(pos,C)
 
             #self._nodes[self._node].append([time, traj[0], traj[1], traj[2]])
