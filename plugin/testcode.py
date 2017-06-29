@@ -5,7 +5,6 @@ from pointscenario import *
 from circlescenario import *
 from node import *
 
-'''
 ## TEST PointScenario ##
 def test1() :
     print '----TEST PointScenario-----'
@@ -61,22 +60,27 @@ def test3() :
     output.addTrajectory(line.trajectory())
     output.printXML()
 
-'''
+
 ## Test Circle Scenario ##
+
 def test4() :
+    print '----TEST Circle Scenario-----'
     node1 = Node(1,'n1')
     node2 = Node(2,'n2')
-    
-    print 'aaa' 
+
     circle = CircleScenario(10.1, 12.2)
     circle.addNode(node1)
     circle.addNode(node2)
-    circle.setProperty(
+
+    circle.setProperty('start_point', [1,1,1])
+    circle.setProperty('radius', 5)
+    
 
     circle.update()
 
+    output.clear()
+    output.addTrajectory(circle.trajectory())
+    output.printXML()
 
-#test1()
-#test2()
-#test3()
-#test4()
+
+test4()

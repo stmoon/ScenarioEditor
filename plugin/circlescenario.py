@@ -13,22 +13,21 @@ class CircleScenario (IScenarioPlugin) :
 	self._properties['trans_start_point'] = [0,0,0]
 	self._properties['trans_end_point'] = [0,0,0]
 	self._properties['p1'] = [[1,1,1]]
-	self._properties['radius'] = 1	    # 
 
 
     def update(self) :
 
-        start_point = np.array(self._properties['start_point'], dtype='float32')
-        end_point = np.array(self._properties['end_point'], dtype='float32')
+        p1 = start_point = np.array(self._properties['start_point'], dtype='float32')
+        #end_point = np.array(self._properties['end_point'], dtype='float32')
         rate = self._properties['rate']
         start_time = self._properties['start_time']
         end_time = self._properties['end_time']
         duration = end_time - start_time
-	
-	p1 = self._properties['p1']
+	#p1 = self._properties['p1']
 	r  = self._properties['radius']
 		
 	# DCM
+	p1 = p1.reshape(1,3)
 	norm = np.linalg.norm(p1)
 	i = (p1/norm).T
 	j = np.dot([[0,-1,0],[1,0,0],[0,0,0]], i)
@@ -40,12 +39,16 @@ class CircleScenario (IScenarioPlugin) :
 	    time = start_time + epoch * (1.0/rate)
 	    offset = np.deg2rad(epoch)
 		        
-	    pos = []
-	    num = len(_nodes)
+	    num = len(self._nodes)
 	    for node, i in zip (self._nodes, range(num)) :
 		theta = np.deg2rad(360 / num) + offset
-	        pos.append( [r * np.cos(theta*i), r * np.sin(theta*i), 0.0] )
-	    pos =  np.dot(pos,C)
+	        traj =  np.array([r * np.cos(theta*i), r * np.sin(theta*i), 0.0])
+		traj = np.dot(traj,C)
+		self._nodes[node].append([time, traj[0], traj[1], traj[2]])
 
+	        #pos.append( [r * np.cos(theta*i), r * np.sin(theta*i), 0.0] )
+	    #pos =  np.dot(pos,C)
+
+	    #print pos
             #self._nodes[self._node].append([time, traj[0], traj[1], traj[2]])
 
