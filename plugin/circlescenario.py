@@ -12,6 +12,9 @@ class CircleScenario (IScenarioPlugin) :
         self._properties['rate'] = 10	    # Hz
 	self._properties['trans_start_point'] = [0,0,0]
 	self._properties['trans_end_point'] = [0,0,0]
+	self._properties['p1'] = [[1,1,1]]
+	self._properties['radius'] = 1	    # 
+
 
     def update(self) :
 
@@ -22,9 +25,8 @@ class CircleScenario (IScenarioPlugin) :
         end_time = self._properties['end_time']
         duration = end_time - start_time
 	
-	p1 = [[1,1,1]]
-	r  = 5
-	num_node = 10
+	p1 = self._properties['p1']
+	r  = self._properties['radius']
 		
 	# DCM
 	norm = np.linalg.norm(p1)
@@ -39,9 +41,11 @@ class CircleScenario (IScenarioPlugin) :
 	    offset = np.deg2rad(epoch)
 		        
 	    pos = []
-	    for i in range(num) :
+	    num = len(_nodes)
+	    for node, i in zip (self._nodes, range(num)) :
 		theta = np.deg2rad(360 / num) + offset
 	        pos.append( [r * np.cos(theta*i), r * np.sin(theta*i), 0.0] )
 	    pos =  np.dot(pos,C)
 
             #self._nodes[self._node].append([time, traj[0], traj[1], traj[2]])
+
