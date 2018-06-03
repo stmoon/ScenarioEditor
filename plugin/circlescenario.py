@@ -1,54 +1,68 @@
 from scenario import *
 import numpy as np
+import math
 
-class CircleScenario (IScenarioPlugin) :
+class CircleScenario (IScenario) :
+
+    _node = None
 
     def __init__(self, start_time, end_time) :
-        IScenarioPlugin.__init__(self, start_time, end_time)
+        IScenario.__init__(self, start_time, end_time)
 
-	self._properties['center_point'] = [0,0,0]
-        self._properties['radius'] = 10
+        self._properties['center_point'] = [ 0, 0, 0 ]
+        self._properties['start_point'] = [0, 0, 0]
+        self._properties['angle'] = 0
         self._properties['speed'] = 0.1	    # m/s
         self._properties['rate'] = 10	    # Hz
-	self._properties['trans_start_point'] = [0,0,0]
-	self._properties['trans_end_point'] = [0,0,0]
-	self._properties['p1'] = [[1,1,1]]
 
 
-    def update(self) :
+    def compile(self) :
 
-        p1 = start_point = np.array(self._properties['start_point'], dtype='float32')
-        #end_point = np.array(self._properties['end_point'], dtype='float32')
+        # get value
+        start = np.array(self._properties['start_point'], dtype='float32')
+        center = np.array(self._properties['center_point'], dtype='float32')
+        start = np.array([start])
+        center = np.array([center])
+        angle_x = self._properties['angle']/2
         rate = self._properties['rate']
-        start_time = self._properties['start_time']
-        end_time = self._properties['end_time']
-        duration = end_time - start_time
-	#p1 = self._properties['p1']
-	r  = self._properties['radius']
-		
-	# DCM
-	p1 = p1.reshape(1,3)
-	norm = np.linalg.norm(p1)
-	i = (p1/norm).T
-	j = np.dot([[0,-1,0],[1,0,0],[0,0,0]], i)
-	k = np.cross(i.T,j.T).T
-	C = np.concatenate([i,j,k], axis=1)
-	
-	# rotation
-	for epoch in xrange(int(rate*duration)) :
-	    time = start_time + epoch * (1.0/rate)
-	    offset = np.deg2rad(epoch)
-		        
-	    num = len(self._nodes)
-	    for node, i in zip (self._nodes, range(num)) :
-		theta = np.deg2rad(360 / num) + offset
-	        traj =  np.array([r * np.cos(theta*i), r * np.sin(theta*i), 0.0])
-		traj = np.dot(traj,C)
-		self._nodes[node].append([time, traj[0], traj[1], traj[2]])
+        len_inter  = 0.1
 
-	        #pos.append( [r * np.cos(theta*i), r * np.sin(theta*i), 0.0] )
-	    #pos =  np.dot(pos,C)
+        # step1 : generate p1 = c-s vector
 
-	    #print pos
-            #self._nodes[self._node].append([time, traj[0], traj[1], traj[2]])
+        p1 = np.array(start - center)
+        rad = np.linalg.norm(p1)
 
+
+        # step2 : generate i,j,k base vertor & DCM matrix
+
+        i = (p1/rad).T
+        j = np.dot([[0,-1,0],[1,0,0],[0,0,0]],i)
+        k = np.cross(i.T,j.T).T
+
+        i = i / np.linalg.norm(i)
+        j = j / np.linalg.norm(j)
+        k = k / np.linalg.norm(k)
+
+        dcm = np.concatenate([i, j, k], axis=1)
+
+        # step3 : generate circle path
+        theta = np.rad2deg( np.arcsin(len_inter / (rad* 2)) *2 )
+        index = int(360 // theta)
+
+        pi = np.array([])
+        for i in range(int(index+2)):
+            c_path = np.array( [ rad * np.cos(np.deg2rad(theta*i)), rad* np.sin(np.deg2rad(theta*i)),0] )
+            p =  np.concatenate([c_path, [1]], axis=0). reshape(1,4)
+
+
+            if pi.size is 0 :
+                pi = p
+            else :
+                pi = np.append(pi, p, axis=0)
+
+        # step4 : generate H vector : dcm, center,null vector
+        H = np.concatenate([dcm, center.T], axis=1)
+        H = np.concatenate([H, [[0, 0, 0, 1]]], axis=0)
+
+        traj  = np.dot(H, pi.T).T
+        self._traj = traj[:,0:3].tolist()
