@@ -1,3 +1,8 @@
+#####################################
+# Taegeuk Scenario 
+# - # of drone : 30
+#####################################
+
 import sys
 sys.path.append("../plugin/")
 
@@ -118,21 +123,18 @@ def test1Scenario() :
     last_pos_xyz = node1.lastPos()
     h=1.5
     g1_t1 =  start_time  +1
-    g1_dt1 = 7
 
 
     ## Translation 
     dst_pos = {}
     dst_pos[21] = [2,15,3]            ## 1
-    dst_pos[2] = [3.5,15,1.8]
     dst_pos[22] = [4.75,15,1.25]        ## 3
-    dst_pos[4] = [6.75,15,1]
-    dst_pos[24] = [8.6,15,1.75]     ## 5
-    dst_pos[26] = [1.1,15,6.8]       ## 11
     dst_pos[23] = [6.75,15,4.75]     ## 13
+    dst_pos[24] = [8.6,15,1.75]     ## 5
     dst_pos[25] = [10.75,15,5.1]     ## 15
-    dst_pos[28] = [5.25,15,7.25]     ## 18
+    dst_pos[26] = [1.1,15,6.8]       ## 11
     dst_pos[27] = [3.25,15,10.25]    ## 21
+    dst_pos[28] = [5.25,15,7.25]     ## 18
     dst_pos[29] = [7,15,10.75]       ## 27
     dst_pos[30] = [9.75,15,9]        ## 30
 
@@ -160,6 +162,7 @@ def test1Scenario() :
     dst_pos[5] = [8.75, 12, 8]       ## 24
 
    
+    g1_dt1 = 6
 
     start_time, end_time = util.nextScenTime(g1_t1, g1_dt1)
     transScen(start_time, end_time, [node26,node27,node28,node29,node30], dst_pos)
