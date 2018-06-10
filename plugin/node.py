@@ -10,7 +10,7 @@ class Node (object) :
             self.setProperty('name', name)
         self.setProperty('init_pos', [0,0,0])
         self.setProperty('takeoff_time', 0.0)
-        self.setProperty('takeoff_height', 0.5)
+        self.setProperty('takeoff_height', 1.0)
         self.setProperty('landing_time', 0.0)
 
         self._traj = dict()     # [time, x, y, z]
