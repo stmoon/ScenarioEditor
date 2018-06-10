@@ -209,7 +209,7 @@ def checkDist(nodes) :
 
                 t2 = np.array(list(node_pos[neighbor].keys()))
                 t2_tmp = t - t2
-                t2_tmp[t2_tmp < 0] = 10000
+                t2_tmp[t2_tmp < 0] = MAX_DIST
                 idx = t2_tmp.argmin()
                 t2 = t2[idx]
 
