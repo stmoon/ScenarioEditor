@@ -158,3 +158,71 @@ def showScenarioTrajectory(scenario, filename='') :
         # show the plot
         plt.show()
 
+
+def checkSpeed(nodes) :
+    node_pos = []
+
+    for node in nodes :
+        init_pos = node.property('init_pos')
+        takeoff_time = node.property('takeoff_time')
+        takeoff_height = node.property('takeoff_height')
+        # traj  = [[0.0] + init_pos]
+        traj = [[takeoff_time, init_pos[0], init_pos[1], takeoff_height]]
+        traj += node.trajectory()
+        node_pos.append(np.array(traj))
+
+
+    for node in nodes :
+        prev_pos = []
+        max_vel = 0
+        for curr_pos in node_pos[0] :
+            if len(prev_pos) is not 0 :
+                diff = np.array(curr_pos) - np.array(prev_pos)
+                dt = diff[0]
+                dist = np.linalg.norm(diff[1:4])
+                max_vel = max([max_vel, dist/dt])
+            prev_pos = curr_pos
+        print("node %d max_vel: %.2f" %  (node.id(), max_vel))
+
+def checkDist(nodes) :
+    MAX_DIST = 10000
+
+    node_pos = {}
+    for node in nodes :
+        init_pos = node.property('init_pos')
+        takeoff_time = node.property('takeoff_time')
+        takeoff_height = node.property('takeoff_height')
+        traj = [[takeoff_time, init_pos[0], init_pos[1], takeoff_height]]
+        traj += node.trajectory()
+        pos = dict((round(p[0],1), p[1::]) for p in traj )
+        node_pos[node.id()] = pos
+
+
+    ret = MAX_DIST
+    for t in np.arange(0,100,0.1) :
+        min_dist = MAX_DIST
+
+        for target in node_pos.keys() :
+
+            for neighbor in node_pos.keys():
+                t = round(t,1)
+
+                t2 = np.array(list(node_pos[neighbor].keys()))
+                t2_tmp = t - t2
+                t2_tmp[t2_tmp < 0] = 10000
+                idx = t2_tmp.argmin()
+                t2 = t2[idx]
+
+                if t in node_pos[target] and t2 in node_pos[neighbor] and target is not neighbor:
+                    diff = np.array(node_pos[target][t]) - np.array(node_pos[neighbor][t2])
+                    dist = np.linalg.norm(diff)
+                    min_dist = min([min_dist, dist])
+                else :
+                    pass
+
+        if min_dist < MAX_DIST :
+            print("Time[%.2f] : %.2f " % (t, min_dist))
+
+        ret = min(ret, min_dist)
+
+    print("Result : %f" % (ret))
