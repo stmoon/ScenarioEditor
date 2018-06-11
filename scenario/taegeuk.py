@@ -30,13 +30,8 @@ def transScen(start_time, end_time, nodes, dst_pos) :
         s1.run()
 
 def changeColor(start_time, end_time, nodes, color) :
-
-    for n in nodes:
-        col = IScenario(start_time, end_time)
+    for n in nodes :
         n.setColor(start_time, color)
-        col.addNode(n)
-        col.compile()
-        col.run()
 
 def test1Scenario() :
 
@@ -85,14 +80,12 @@ def test1Scenario() :
 
     ## Takeoff
     for i in [1,2,3,4,5,11,12,13,14,15,21,22,23,24,25]:
-        group[i-1].setProperty('takeoff_time', 2.0)
-
-
-    for i in [6,7,8,9,10,16,17,18,19,20,26,27,28,29,30]:
         group[i-1].setProperty('takeoff_time', 4.0)
 
 
-    start_time = 4
+    for i in [6,7,8,9,10,16,17,18,19,20,26,27,28,29,30]:
+        group[i-1].setProperty('takeoff_time', 2.0)
+
 
     ##
     l1_dis=15
@@ -136,6 +129,7 @@ def test1Scenario() :
     taeguek_pos[2] = [4.75, l4_dis, 9.25]    ## 23
     taeguek_pos[5] = [8.75, l4_dis, 8]       ## 24
    
+    start_time = 6
     g1_t1 =  start_time +1
     g1_dt1 = 10
     
