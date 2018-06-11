@@ -96,7 +96,7 @@ for target_id in range(1,21) :
                 elif cmd_str == 'led' :
                     buf = "%d,%d,%.2f,%s,%s" % (count, id, time, cmd_str, values)
                 elif cmd_str == 'landing' :
-                    buf = "%d,%d,%.2f,landing,-2" % (count, id, time)
+                    buf = "%d,%d,%.2f,landing,0" % (count, id, time)
                 else :
                     buf = "ERROR"
 
@@ -105,5 +105,5 @@ for target_id in range(1,21) :
 	        
 	        f.write(buf+'\r\n') 
 
-    buf = "%d,%d,%.2f,cmd,disarm" % (count, target_id, time + 3.0)
+    #buf = "%d,%d,%.2f,cmd,disarm" % (count, target_id, time + 3.0)
     f.write(buf+'\r\n') 
