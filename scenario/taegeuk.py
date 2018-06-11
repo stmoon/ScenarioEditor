@@ -29,6 +29,14 @@ def transScen(start_time, end_time, nodes, dst_pos) :
         s1.compile()
         s1.run()
 
+def changeColor(start_time, end_time, nodes, color) :
+
+    for n in nodes:
+        col = IScenario(start_time, end_time)
+        n.setColor(start_time, color)
+        col.addNode(n)
+        col.compile()
+        col.run()
 
 def test1Scenario() :
 
@@ -68,11 +76,6 @@ def test1Scenario() :
              node11, node12, node13, node14, node15,
              node16, node17, node18, node19, node20,node21,node22,node23,node24,node25,node26,node27,node28,node29,node30]
 
-    group1 = [node1,node3,node5,node11,node13,node15,node18,node21,node27,node30]
-    group2 = [node2, node4, node6, node10, node12, node16, node19, node25,node26,  node28]
-    group3 = [node7, node9, node20, node22, node29]
-    group4 = [node8, node14, node17, node23, node24]
-
     init_pos = {}           ## initial position
     for n, i in zip(group, range(len(group))):
         x = (i % 5) * 2.0
@@ -82,94 +85,96 @@ def test1Scenario() :
 
     ## Takeoff
     for i in [1,2,3,4,5,11,12,13,14,15,21,22,23,24,25]:
-        group[i-1].setProperty('takeoff_time', 1.0)
-
-
-    for i in [6,7,8,9,10,16,17,18,19,20,26,27,28,29,30]:
         group[i-1].setProperty('takeoff_time', 2.0)
 
 
-    start_time = 2
-    t0 = start_time + 1
-    dt0 =1
-    t1 = t0+1
-    dt1= 5
+    for i in [6,7,8,9,10,16,17,18,19,20,26,27,28,29,30]:
+        group[i-1].setProperty('takeoff_time', 4.0)
 
 
-    h = 0
-    start_time, end_time = util.nextScenTime(t0, dt0)
-    s_up1 = IScenario(start_time, end_time)
-    s_up1.setProperty('trans', [0.0, 0.0, h])
-    s_up1.setProperty('is_moving', False)
-    s_up1.addNode(group)
-    s_up1.changeColor(t0, [0, 0, 0, 0, 0, 0])
-    s_up1.compile()
-    s_up1.run()
+    start_time = 4
 
-    ## Translation 
+    ##
+    l1_dis=15
+    l2_dis=14
+    l3_dis=13
+    l4_dis=12
+
     taeguek_pos = {}
-    taeguek_pos[21] = [2,15,3]            ## 1
-    taeguek_pos[22] = [4.75,15,1.25]        ## 3
-    taeguek_pos[23] = [6.75,15,4.75]     ## 13
-    taeguek_pos[24] = [8.6,15,1.75]     ## 5
-    taeguek_pos[25] = [10.75,15,5.1]     ## 15
-    taeguek_pos[26] = [1.1,15,6.8]       ## 11
-    taeguek_pos[27] = [3.25,15,10.25]    ## 21
-    taeguek_pos[28] = [5.25,15,7.25]     ## 18
-    taeguek_pos[29] = [7,15,10.75]       ## 27
-    taeguek_pos[30] = [9.75,15,9]        ## 30
+    taeguek_pos[21] = [2,l1_dis,3]           ## 1
+    taeguek_pos[22] = [4.75,l1_dis,1.25]     ## 3
+    taeguek_pos[24] = [8.6,l1_dis,1.75]      ## 5
+    taeguek_pos[26] = [1.1,l1_dis,6.8]       ## 11
+    taeguek_pos[23] = [6.75,l1_dis,4.75]     ## 13
+    taeguek_pos[25] = [10.75,l1_dis,5.1]     ## 15
+    taeguek_pos[28] = [5.25,l1_dis,7.25]     ## 18
+    taeguek_pos[27] = [3.25,l1_dis,10.25]    ## 21
+    taeguek_pos[29] = [7,l1_dis,10.75]       ## 27
+    taeguek_pos[30] = [9.75,l1_dis,9]        ## 30
 
-    taeguek_pos[16] = [1.9, 14, 8.75]       ## 16
-    taeguek_pos[17] = [5.2, 14, 10.75]       ##26
-    taeguek_pos[18] = [7.2, 14, 6.75]       ## 19
-    taeguek_pos[19] = [8.5, 14, 10]       ## 28
-    taeguek_pos[20] = [10.6, 14, 7.25]       ## 25
-    taeguek_pos[11] = [1.25, 14, 4.75]       ## 6
-    taeguek_pos[12] = [3.5, 14, 1.8]       ## 2
-    taeguek_pos[13] = [4.75, 14, 5.25]       ## 12
-    taeguek_pos[14] = [6.75, 14, 1]       ## 4
-    taeguek_pos[15] = [10, 14, 3.25]       ## 10
+    taeguek_pos[12] = [3.5, l2_dis, 1.8]     ## 2
+    taeguek_pos[14] = [6.75, l2_dis, 1]      ## 4
+    taeguek_pos[11] = [1.25, l2_dis, 4.75]   ## 6
+    taeguek_pos[15] = [10, l2_dis, 3.25]     ## 10
+    taeguek_pos[13] = [4.75, l2_dis, 5.25]   ## 12
+    taeguek_pos[16] = [1.9, l2_dis, 8.75]    ## 16
+    taeguek_pos[18] = [7.2, l2_dis, 6.75]    ## 19
+    taeguek_pos[20] = [10.6, l2_dis, 7.25]   ## 25
+    taeguek_pos[17] = [5.2, l2_dis, 10.75]   ## 26
+    taeguek_pos[19] = [8.5, l2_dis, 10]      ## 28
 
-    taeguek_pos[6] = [3.25, 13, 4]       ## 7
-    taeguek_pos[7] = [3.6, 13, 8]       ## 22
-    taeguek_pos[8] = [6.6, 13, 9.0]       ## 29
-    taeguek_pos[9] = [7, 13, 2.75]       ## 9
-    taeguek_pos[10] = [9, 13, 5.9]       ## 20
 
-    taeguek_pos[1] = [3, 12, 6]       ## 17
-    taeguek_pos[2] = [4.75, 12, 9.25]       ## 23
-    taeguek_pos[3] = [5.25, 12, 2.75]       ## 8
-    taeguek_pos[4] = [8.5, 12, 4]       ## 14
-    taeguek_pos[5] = [8.75, 12, 8]       ## 24
+    taeguek_pos[6] = [3.25, l3_dis, 4]       ## 7
+    taeguek_pos[9] = [7, l3_dis, 2.75]       ## 9
+    taeguek_pos[10] = [9, l3_dis, 5.9]       ## 20
+    taeguek_pos[7] = [3.6, l3_dis, 8]        ## 22
+    taeguek_pos[8] = [6.6, l3_dis, 9.0]      ## 29
 
+    taeguek_pos[3] = [5.25, l4_dis, 2.75]    ## 8
+    taeguek_pos[4] = [8.5, l4_dis, 4]        ## 14
+    taeguek_pos[1] = [3, l4_dis, 6]          ## 17
+    taeguek_pos[2] = [4.75, l4_dis, 9.25]    ## 23
+    taeguek_pos[5] = [8.75, l4_dis, 8]       ## 24
    
-    g1_t1 =  start_time  +1
+    g1_t1 =  start_time +1
     g1_dt1 = 10
     
     start_time, end_time = util.nextScenTime(g1_t1, g1_dt1)
     transScen(start_time, end_time, [node26,node27,node28,node29,node30], taeguek_pos)
+    changeColor(start_time, end_time, [node26,node27,node28,node29,node30], [0, 0, 255, 0, 0, 255])
 
     start_time, end_time = util.nextScenTime(end_time-3, g1_dt1)
     transScen(start_time, end_time, [node21,node22,node23,node24,node25], taeguek_pos)
+    changeColor(start_time, end_time, [node21,node22,node23,node24,node25], [0, 0, 0, 0, 255, 255])
 
     start_time, end_time = util.nextScenTime(end_time-3, g1_dt1)
     transScen(start_time, end_time, [node16,node17,node18,node19,node20], taeguek_pos)
+    changeColor(start_time, end_time, [node16,node17,node19,node20], [0, 0, 255, 0, 0, 255])
+    changeColor(start_time, end_time, [node18], [0, 0, 0, 0, 255, 255])
 
     start_time, end_time = util.nextScenTime(end_time-3, g1_dt1)
     transScen(start_time, end_time, [node11,node12,node13,node14,node15], taeguek_pos)
+    changeColor(start_time, end_time, [node11, node13], [0, 0, 255, 0, 0, 255])
+    changeColor(start_time, end_time, [node12, node14, node15], [0, 0, 0, 0, 255, 255])
 
     start_time, end_time = util.nextScenTime(end_time-3, g1_dt1)
     transScen(start_time, end_time, [node6,node7,node8,node9,node10], taeguek_pos)
+    changeColor(start_time, end_time, [node6, node7, node8], [0, 0, 255, 0, 0, 255])
+    changeColor(start_time, end_time, [node9, node10], [0, 0, 0, 0, 255, 255])
+
 
     start_time, end_time = util.nextScenTime(end_time-3, g1_dt1)
     transScen(start_time, end_time, [node1,node2,node3,node4,node5], taeguek_pos)
-    
+    changeColor(start_time, end_time, [node1, node2], [0, 0, 255, 0, 0, 255])
+    changeColor(start_time, end_time, [node3, node4, node5], [0, 0, 0, 0, 255, 255])
+
 
     ## Come back to initial position
     end_time = start_time + 20
     
     start_time, end_time = util.nextScenTime(end_time, g1_dt1)
     transScen(start_time, end_time, [node1,node2,node3,node4,node5], init_pos)
+
  
     start_time, end_time = util.nextScenTime(end_time-3, g1_dt1)
     transScen(start_time, end_time, [node6,node7,node8,node9,node10], init_pos)
