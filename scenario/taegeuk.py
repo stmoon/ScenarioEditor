@@ -87,7 +87,7 @@ def test1Scenario() :
         group[i-1].setProperty('takeoff_time', 2.0)
 
 
-    ##
+    ##############################################################
     l1_dis=15
     l2_dis=14
     l3_dis=13
@@ -265,7 +265,7 @@ def test1Scenario() :
 
     ## check speed
     #util.checkSpeed(group)
-    util.checkDist(group)
+    #util.checkDist(group)
 
     ## show node trajecotry using animation
     util.showNodeTrajectory(group)
