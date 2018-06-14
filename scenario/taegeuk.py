@@ -130,7 +130,7 @@ def test1Scenario() :
     taeguek_pos[5] = [8.75, l4_dis, 8]       ## 24
    
     start_time = 6
-    g1_t1 =  start_time +1
+    g1_t1 = start_time +1
     g1_dt1 = 10
     
     start_time, end_time = util.nextScenTime(g1_t1, g1_dt1)
@@ -162,7 +162,78 @@ def test1Scenario() :
     changeColor(start_time, end_time, [node1, node2], [0, 0, 255, 0, 0, 255])
     changeColor(start_time, end_time, [node3, node4, node5], [0, 0, 0, 0, 255, 255])
 
+    ####################################################################################################################
+    l1_dis = 7
+    l2_dis = 8
+    l3_dis = 9
+    l4_dis = 10
 
+    in_pos = {}
+    in_pos[1] = [5.5, l1_dis, 6.75]  ## 17
+    in_pos[2] = [5.5, l1_dis, 8]  ## 21
+    in_pos[3] = [4.75, l1_dis, 5.25]  ## 8
+    in_pos[4] = [8.25, l1_dis, 1.75]  ## 14
+    in_pos[5] = [7, l1_dis, 3.5]  ## 18
+
+    in_pos[10] = [9.75, l1_dis, 1.75]  ## 24
+
+    in_pos[6] = [3.75, l2_dis, 3.75]  ## 7
+    in_pos[11] = [2.75, l2_dis, 2.5]  ## 9
+    in_pos[7] = [5.25, l2_dis, 5.75]  ## 12
+    in_pos[9] = [8.25, l2_dis, 2.75]  ## 19
+    in_pos[15] = [9.25, l2_dis, 2]  ## 20
+    in_pos[8] = [5.5, l2_dis, 7.5]  ## 22
+    in_pos[13] = [6.25, l2_dis, 4.5]  ## 29
+
+    in_pos[16] = [1.75, l3_dis, 2]  ## 2
+    in_pos[14] = [7.75, l3_dis, 2.5]  ## 4
+    in_pos[17] = [3.25, l3_dis, 3]  ## 6
+    in_pos[25] = [8.75, l3_dis, 1.75]  ## 10
+    in_pos[12] = [4.25, l3_dis, 4.25]  ## 16
+    in_pos[20] = [6.75, l3_dis, 4]  ## 25
+    in_pos[19] = [5.75, l3_dis, 7.25]  ## 26
+    in_pos[18] = [5.75, l3_dis, 5.5]  ## 28
+
+    in_pos[23] = [4.5, l4_dis, 4.75]  ## 1
+    in_pos[22] = [3.5, l4_dis, 3.25]  ## 3
+    in_pos[24] = [7.5, l4_dis, 3]  ## 30
+    in_pos[21] = [2.25, l4_dis, 2.25]  ## 5
+    in_pos[29] = [8.75, l4_dis, 2.25]  ## 13
+    in_pos[26] = [5.25, l4_dis, 6.25]  ## 11
+    in_pos[28] = [6, l4_dis, 5]  ## 27
+    in_pos[30] = [10.5, l4_dis, 1.75]  ## 15
+    in_pos[27] = [6, l4_dis, 7.75]  ## 23
+
+    #g1_t2 = t_rot + g1_dt2 +3
+    g1_t2 = end_time + 3
+    g1_dt3 = 10
+
+    start_time, end_time = util.nextScenTime(g1_t2, g1_dt3)
+    transScen(start_time, end_time, [node1, node2, node3, node4, node5], in_pos)
+    changeColor(start_time, end_time, [node1, node2, node3, node4, node5], [0, 0, 0, 255, 0, 255])
+
+    start_time, end_time = util.nextScenTime(end_time , g1_dt3)
+    transScen(start_time, end_time, [node6, node7, node8, node9, node10], in_pos)
+    changeColor(start_time, end_time, [node6, node7, node8, node9, node10], [0, 0, 0, 255, 0, 255])
+
+    start_time, end_time = util.nextScenTime(end_time , g1_dt3)
+    transScen(start_time, end_time, [node11, node12, node13, node14, node15], in_pos)
+    changeColor(start_time, end_time, [node11, node12, node13, node14, node15], [0, 0, 0, 255, 0, 255])
+
+    start_time, end_time = util.nextScenTime(end_time , g1_dt3)
+    transScen(start_time, end_time, [node16, node17, node18, node19, node20], in_pos)
+    changeColor(start_time, end_time, [node16, node17, node18, node19, node20], [0, 0, 0, 255, 0, 255])
+
+    start_time, end_time = util.nextScenTime(end_time , g1_dt3)
+    transScen(start_time, end_time, [node21, node22, node23, node24, node25], in_pos)
+    changeColor(start_time, end_time, [node21, node22, node23, node24, node25], [0, 0, 0, 255, 0, 255])
+
+    start_time, end_time = util.nextScenTime(end_time , g1_dt3)
+    transScen(start_time, end_time, [node26, node27, node28, node29, node30], in_pos)
+    changeColor(start_time, end_time, [node26, node27, node28, node29, node30], [0, 0, 0, 255, 0, 255])
+
+    end_time = end_time +g1_dt3 +7
+    ####################################################################################################################
     ## Come back to initial position
     end_time = start_time + 20
     
@@ -194,7 +265,7 @@ def test1Scenario() :
 
     ## check speed
     #util.checkSpeed(group)
-    #util.checkDist(group)
+    util.checkDist(group)
 
     ## show node trajecotry using animation
     util.showNodeTrajectory(group)
