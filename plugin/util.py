@@ -31,8 +31,12 @@ def showNodeTrajectory(nodes, filename='') :
         node_plot.append(p)
 
     def animate(count):
+
+        t = round(count * 0.1, 2)
+        if t > 1.0 :
+            checkDist(nodes, t)
+
         for d, p, c in zip(node_data, node_plot, node_color) :
-            t = round(count * 0.1, 2)
 
             # trajectory
             if len(d) is 0 :
@@ -184,7 +188,7 @@ def checkSpeed(nodes) :
             prev_pos = curr_pos
         print("node %d max_vel: %.2f" %  (node.id(), max_vel))
 
-def checkDist(nodes) :
+def checkDist(nodes, time = 0.0) :
     MAX_DIST = 10000
 
     node_pos = {}
@@ -199,7 +203,12 @@ def checkDist(nodes) :
 
 
     ret = MAX_DIST
-    for t in np.arange(0,100,0.1) :
+    if time == 0.0  :
+        time_range =  np.arange(5, 200, 0.1)
+    else :
+        time_range = [time]
+    
+    for t in time_range :
         min_dist = MAX_DIST
 
         for target in node_pos.keys() :
@@ -225,4 +234,5 @@ def checkDist(nodes) :
 
         ret = min(ret, min_dist)
 
-    print("Result : %f" % (ret))
+    if time == 0.0 :
+        print("Result : %f" % (ret))
