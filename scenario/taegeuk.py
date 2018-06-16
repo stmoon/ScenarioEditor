@@ -36,6 +36,11 @@ def changeColor(start_time, end_time, nodes, color):
 
 
 def test1Scenario():
+    red = [0, 0, 255, 0, 0, 255]
+    green = [0, 0, 0, 255, 0, 255]
+    blue = [0, 0, 0, 0, 255, 255]
+    brown = [0, 0, 0, 150, 50, 255]
+
     node1 = Node(1)
     node2 = Node(2)
     node3 = Node(3)
@@ -87,7 +92,11 @@ def test1Scenario():
     for i in [6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 26, 27, 28, 29, 30]:
         group[i - 1].setProperty('takeoff_time', 2.0)
 
-    ##############################################################
+    ###########################################################################
+    # TAEGEUK SCEN
+    ###########################################################################
+
+
     l1_dis=15
     l2_dis=14
     l3_dis=13
@@ -96,12 +105,12 @@ def test1Scenario():
     taeguek_pos = {}
     taeguek_pos[21] = [2, l1_dis, 3]  ## 1
     taeguek_pos[22] = [4.75, l1_dis, 1.25]  ## 3
-    taeguek_pos[24] = [8.6, l1_dis, 1.75]  ## 5
-    taeguek_pos[26] = [1.1, l1_dis, 6.8]  ## 11
     taeguek_pos[23] = [6.75, l1_dis, 4.75]  ## 13
+    taeguek_pos[24] = [8.6, l1_dis, 1.75]  ## 5
     taeguek_pos[25] = [10.75, l1_dis, 5.1]  ## 15
-    taeguek_pos[28] = [5.25, l1_dis, 7.25]  ## 18
+    taeguek_pos[26] = [1.1, l1_dis, 6.8]  ## 11
     taeguek_pos[27] = [3.25, l1_dis, 10.25]  ## 21
+    taeguek_pos[28] = [5.25, l1_dis, 7.25]  ## 18\
     taeguek_pos[29] = [7, l1_dis, 10.75]  ## 27
     taeguek_pos[30] = [9.75, l1_dis, 9]  ## 30
 
@@ -162,47 +171,93 @@ def test1Scenario():
     changeColor(g1_t1 + c_change_dt, end_time, [node1, node2], [0, 0, 255, 0, 0, 255])
     changeColor(g1_t1 + c_change_dt, end_time, [node3, node4, node5], [0, 0, 0, 0, 255, 255])
 
-    ####################################################################################################################
-    l1_dis = 7
-    l2_dis = 8
-    l3_dis = 9
+    ###########################################################################
+    # TAEGEUK ROTATION
+    ###########################################################################
+
+    t_rot = end_time
+    g1_dt2 = 40
+    center1 = [6, l1_dis, 6]
+    group1 = [node29,node19,node30,node20,node25,
+              node15,node24,node14,node22,node12,
+              node21,node11,node26,node16,node27,
+              node17]
+
+    start_time, end_time = util.nextScenTime(end_time +2, g1_dt2)
+    s_rot1 = IScenario(start_time, end_time)
+    s_rot1.setProperty("rot_center", center1)
+    s_rot1.setProperty("rot_angle", 360)
+    s_rot1.setProperty("rot_direct", [0.0, 1.0, 0.0])
+    s_rot1.setProperty('is_moving', False)
+    s_rot1.addNode(group1)
+    s_rot1.compile()
+    s_rot1.run()
+
+
+    duration = end_time - start_time
+    for t in np.arange(start_time, end_time, 0.1) :
+        for n,i in zip(group1, range(len(group1))) :
+            offset = 10 
+            RED2BLUE = 50 
+            BLUE2RED = 250 
+            angle = (i*(360.0/len(group1)) + (360.0/(duration)) * (t-start_time) + offset )%360
+
+            if (angle >= 0 and angle <= RED2BLUE-5) or (angle >= BLUE2RED+5 and angle <= 360) :
+                changeColor(t, 0, [n], red)
+            elif (angle >= RED2BLUE+5) and (angle <= BLUE2RED-5) :
+                changeColor(t, 0, [n], blue)
+            elif (angle >= RED2BLUE-5) and (angle <= RED2BLUE+5) : # red -> blue
+                ratio = (RED2BLUE+5 - angle)  / 10.0
+                changeColor(t, 0, [n], [0, 0, int(255.0*ratio), 0, int(255.0*(1.0-ratio)), 255])
+            elif (angle >= BLUE2RED-5) and (angle <= BLUE2RED+5) : # blue -> red
+                ratio = (BLUE2RED+5 - angle)  / 10.0
+                changeColor(t, 0, [n], [0, 0, int(255.0*(1.0-ratio)), 0, int(255.0*ratio), 255])
+
+    ###########################################################################
+    # SARAM-IN SCEN 
+    ###########################################################################
+    '''
+    l1_dis = 7.6
+    l2_dis = 8.8
+    l3_dis = 10
     l4_dis = 10
 
     in_pos = {}
-    in_pos[1] = [5.5, l1_dis, 6.75]  ## 17
-    in_pos[2] = [5.5, l1_dis, 8]  ## 21
-    in_pos[3] = [4.75, l1_dis, 5.25]  ## 8
-    in_pos[4] = [8.25, l1_dis, 1.75]  ## 14
-    in_pos[5] = [7, l1_dis, 3.5]  ## 18
+    in_pos[1] = [0.75, l1_dis, 1.25]
+    in_pos[2] = [4.75, l1_dis, 7.7]
+    in_pos[3] = [3, l1_dis, 4.1]
+    in_pos[4] = [8.7, l1_dis, 2.2]
+    in_pos[5] = [6.25, l1_dis, 4.6]
+    in_pos[6] = [1.75, l1_dis, 2.6]
+    in_pos[7] = [4, l1_dis, 5.75]
+    in_pos[8] = [4.6, l1_dis, 9.2]
+    in_pos[9] = [7.6, l1_dis, 3.4]
+    in_pos[10] = [9.75, l1_dis, 1.2]
 
-    in_pos[10] = [9.75, l1_dis, 1.75]  ## 24
 
-    in_pos[6] = [3.75, l2_dis, 3.75]  ## 7
-    in_pos[11] = [2.75, l2_dis, 2.5]  ## 9
-    in_pos[7] = [5.25, l2_dis, 5.75]  ## 12
-    in_pos[9] = [8.25, l2_dis, 2.75]  ## 19
-    in_pos[15] = [9.25, l2_dis, 2]  ## 20
-    in_pos[8] = [5.5, l2_dis, 7.5]  ## 22
-    in_pos[13] = [6.25, l2_dis, 4.5]  ## 29
+    in_pos[11] = [2.25, l2_dis, 1.4]
+    in_pos[12] = [4.25, l2_dis, 4.25]
+    in_pos[13] = [5.25, l2_dis, 5.75]
+    in_pos[14] = [7.5, l2_dis, 4.75]
+    in_pos[15] = [11.25, l2_dis, 1]
+    in_pos[16] = [3.25, l2_dis, 2.6]
+    in_pos[17] = [5.9, l2_dis, 8.5]
+    in_pos[18] = [6.25, l2_dis, 6.75]
+    in_pos[19] = [8.75, l2_dis, 3.5]
+    in_pos[20] = [10, l2_dis, 2.25]
 
-    in_pos[16] = [1.75, l3_dis, 2]  ## 2
-    in_pos[14] = [7.75, l3_dis, 2.5]  ## 4
-    in_pos[17] = [3.25, l3_dis, 3]  ## 6
-    in_pos[25] = [8.75, l3_dis, 1.75]  ## 10
-    in_pos[12] = [4.25, l3_dis, 4.25]  ## 16
-    in_pos[20] = [6.75, l3_dis, 4]  ## 25
-    in_pos[19] = [5.75, l3_dis, 7.25]  ## 26
-    in_pos[18] = [5.75, l3_dis, 5.5]  ## 28
 
-    in_pos[23] = [4.5, l4_dis, 4.75]  ## 1
-    in_pos[22] = [3.5, l4_dis, 3.25]  ## 3
-    in_pos[24] = [7.5, l4_dis, 3]  ## 30
-    in_pos[21] = [2.25, l4_dis, 2.25]  ## 5
-    in_pos[29] = [8.75, l4_dis, 2.25]  ## 13
-    in_pos[26] = [5.25, l4_dis, 6.25]  ## 11
-    in_pos[28] = [6, l4_dis, 5]  ## 27
-    in_pos[30] = [10.5, l4_dis, 1.75]  ## 15
-    in_pos[27] = [6, l4_dis, 7.75]  ## 23
+    in_pos[21] = [1.6, l3_dis, 1.6]
+    in_pos[22] = [3.0, l3_dis, 3.25]
+    in_pos[23] = [7.5, l3_dis, 4]
+    in_pos[24] = [9, l3_dis, 2.5]
+    in_pos[25] = [10.25, l3_dis, 1.3]
+    in_pos[26] = [4, l3_dis, 4.8]
+    in_pos[27] = [5.2, l3_dis, 9]
+    in_pos[28] = [4.75, l3_dis, 6.25]
+    in_pos[29] = [5.5, l3_dis, 7.75]
+    in_pos[30] = [6.4, l3_dis, 5.5]
+
 
     # g1_t2 = t_rot + g1_dt2 +3
     g1_t2 = end_time + 3
@@ -210,32 +265,31 @@ def test1Scenario():
 
     start_time, end_time = util.nextScenTime(g1_t2, g1_dt3)
     transScen(start_time, end_time, [node1, node2, node3, node4, node5], in_pos)
-    changeColor(start_time, end_time, [node1, node2, node3, node4, node5], [0, 0, 0, 255, 0, 255])
+    changeColor(start_time, end_time, [node1, node2, node3, node4, node5], brown)
 
     start_time, end_time = util.nextScenTime(end_time, g1_dt3)
     transScen(start_time, end_time, [node6, node7, node8, node9, node10], in_pos)
-    changeColor(start_time, end_time, [node6, node7, node8, node9, node10], [0, 0, 0, 255, 0, 255])
+    changeColor(start_time, end_time, [node6, node7, node8, node9, node10], brown)
 
     start_time, end_time = util.nextScenTime(end_time, g1_dt3)
     transScen(start_time, end_time, [node11, node12, node13, node14, node15], in_pos)
-    changeColor(start_time, end_time, [node11, node12, node13, node14, node15], [0, 0, 0, 255, 0, 255])
+    changeColor(start_time, end_time, [node11, node12, node13, node14, node15], brown)
 
     start_time, end_time = util.nextScenTime(end_time, g1_dt3)
     transScen(start_time, end_time, [node16, node17, node18, node19, node20], in_pos)
-    changeColor(start_time, end_time, [node16, node17, node18, node19, node20], [0, 0, 0, 255, 0, 255])
+    changeColor(start_time, end_time, [node16, node17, node18, node19, node20], brown)
 
     start_time, end_time = util.nextScenTime(end_time, g1_dt3)
     transScen(start_time, end_time, [node21, node22, node23, node24, node25], in_pos)
-    changeColor(start_time, end_time, [node21, node22, node23, node24, node25], [0, 0, 0, 255, 0, 255])
+    changeColor(start_time, end_time, [node21, node22, node23, node24, node25], brown)
 
     start_time, end_time = util.nextScenTime(end_time, g1_dt3)
     transScen(start_time, end_time, [node26, node27, node28, node29, node30], in_pos)
-    changeColor(start_time, end_time, [node26, node27, node28, node29, node30], [0, 0, 0, 255, 0, 255])
-
-    end_time = end_time + g1_dt3 + 7
+    changeColor(start_time, end_time, [node26, node27, node28, node29, node30], brown)
+    '''
     ####################################################################################################################
     ## Come back to initial position
-    end_time = start_time + 20
+    end_time = end_time  + 10
 
     start_time, end_time = util.nextScenTime(end_time, g1_dt1)
     transScen(start_time, end_time, [node1, node2, node3, node4, node5], init_pos)
@@ -263,7 +317,7 @@ def test1Scenario():
     output.outputXML("./test_taegeuk.sc", group)
 
     ## check speed
-    #util.checkSpeed(group)
+    util.checkSpeed(group)
     #util.checkDist(group)
 
     ## show node trajecotry using animation
