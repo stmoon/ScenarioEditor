@@ -73,6 +73,7 @@ class Node (object) :
         return self._color
 
     def setColor(self, time, color_data):
+        time = round(time, 2)
         self._color.append([time] + color_data)
 
     def setTakeoff(self, time, height):
